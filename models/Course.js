@@ -1,42 +1,41 @@
 const mongoose = require('mongoose');
 
 const LessonSchema = new mongoose.Schema({
-    title: String,
-    type: { type: String, enum: ['video', 'pdf', 'text'] },
-    contentUrl: String,
-    duration: Number
+  title: { type: String, required: true },
+  type: { type: String, enum: ['video', 'pdf', 'text'], required: true },
+  contentUrl: { type: String, required: true },
+  duration: { type: Number, required: true } // in minutes
 });
 
 const QuizQuestionSchema = new mongoose.Schema({
-    questionText: String,
-    questionType: { type: String, enum: ['mcq', 'true_false'] },
-    options: [String],
-    correctAnswer: String
+  questionText: { type: String, required: true },
+  questionType: { type: String, enum: ['mcq', 'true_false'], required: true },
+  options: [String],
+  correctAnswer: { type: String, required: true }
 });
 
 const QuizSchema = new mongoose.Schema({
-    title: String,
-    passingScore: Number,
-    questions: [QuizQuestionSchema]
+  title: { type: String, required: true },
+  passingScore: { type: Number, required: true },
+  questions: [QuizQuestionSchema]
 });
 
 const ModuleSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    sequence: Number,
-    lessons: [LessonSchema],
-    quizzes: [QuizSchema]
+  title: { type: String, required: true },
+  description: String,
+  sequence: { type: Number, required: true },
+  lessons: [LessonSchema],
+  quizzes: [QuizSchema]
 });
 
 const CourseSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    category: String,
-    instructorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    status: { type: String, enum: ['draft', 'published', 'archived'], default: 'draft' },
-    startDate: Date,
-    endDate: Date,
-    modules: [ModuleSchema]
-}, { timestamps: true });
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  instructor: { type: String, required: true },
+  category: { type: String, required: true },
+  duration: { type: Number, required: true }, // total hours
+  modules: [ModuleSchema],
+  createdAt: { type: Date, default: Date.now }
+});
 
 module.exports = mongoose.model('Course', CourseSchema);
