@@ -1,6 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -8,4 +7,6 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-module.exports = cloudinary;
+cloudinary.api.ping()
+  .then(() => console.log('✅ Cloudinary connected'))
+  .catch(err => console.error('❌ Cloudinary error:', err.message));
